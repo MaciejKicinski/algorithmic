@@ -1,12 +1,8 @@
-import java.util.TreeMap;
 
 public class Main {
 
     public static void main(String[] args) {
         int size;
-//        TreeMapTask treeMapTask = new TreeMapTask();
-//        System.out.println(treeMapTask.toString());
-//        System.out.println(treeMapTask.putTime().size() +" " +treeMapTask.getLastKey());
         BinaryTree bt = new BinaryTree();
         for (int i = 1; i <= 200; i++) {
             size = i;
