@@ -50,87 +50,55 @@ public class BinaryTree {
         return search(root.left, key);
     }
 
-    static void deleteValue(Node root, int key) {
+    // This method mainly calls deleteRec()
+    void deleteKey(int key) { root = deleteRec(root, key); }
+
+    /* A recursive function to
+      delete an existing key in BST
+     */
+    Node deleteRec(Node root, int key)
+    {
+        /* Base Case: If the tree is empty */
         if (root == null)
-            return;
+            return null;
 
-        if (root.left == null &&
-                root.right == null) {
-            if (root.value == key)
-                return;
-            else
-                return;
+        /* Otherwise, recur down the tree */
+        if (key < root.value)
+            root.left = deleteRec(root.left, key);
+        else if (key > root.value)
+            root.right = deleteRec(root.right, key);
+
+            // if key is same as root's
+            // key, then This is the
+            // node to be deleted
+        else {
+            // node with only one child or no child
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
+
+            // node with two children: Get the inorder
+            // successor (smallest in the right subtree)
+            root.value = minValue(root.right);
+
+            // Delete the inorder successor
+            root.right = deleteRec(root.right, root.value);
         }
 
-        Queue<Node> q = new LinkedList<Node>();
-        q.add(root);
-        Node temp = null, keyNode = null;
-
-        // Do level order traversal until
-        // we find key and last node.
-        while (!q.isEmpty()) {
-            temp = q.peek();
-            q.remove();
-
-            if (temp.value == key)
-                keyNode = temp;
-
-            if (temp.left != null)
-                q.add(temp.left);
-
-            if (temp.right != null)
-                q.add(temp.right);
-        }
-
-        if (keyNode != null) {
-            int x = temp.value;
-            deleteDeepest(root, temp);
-            keyNode.value = x;
-        }
+        return root;
     }
-
-    static void deleteDeepest(Node root, Node delNode) {
-        Queue<Node> q = new LinkedList<Node>();
-        q.add(root);
-
-        Node temp = null;
-
-        // Do level order traversal until last node
-        while (!q.isEmpty()) {
-            temp = q.peek();
-            q.remove();
-
-            if (temp == delNode) {
-                temp = null;
-                return;
-
-            }
-            if (temp.right != null) {
-                if (temp.right == delNode) {
-                    temp.right = null;
-                    return;
-                } else
-                    q.add(temp.right);
-            }
-
-            if (temp.left != null) {
-                if (temp.left == delNode) {
-                    temp.left = null;
-                    return;
-                } else
-                    q.add(temp.left);
-            }
+    int minValue(Node root)
+    {
+        int minv = root.value;
+        while (root.left != null)
+        {
+            minv = root.left.value;
+            root = root.left;
         }
+        return minv;
     }
-
-    private Integer minValue(Node node) {
-        if (node.left != null) {
-            return minValue(node.left);
-        }
-        return node.value;
-    }
-
     public void delete(Node root, int value) {
-        deleteValue(root, value);
+        deleteRec(root, value);
     }
 }
