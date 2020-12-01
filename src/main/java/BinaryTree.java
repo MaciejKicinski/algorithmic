@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BinaryTree {
     Node root;
@@ -35,20 +37,6 @@ public class BinaryTree {
             return (rightDepth + 1);
     }
 
-    int maxDepthValue(Node root) {
-        if (root == null)
-            return 0;
-        // Get the depth of the left and right subtree
-        // using recursion.
-        int leftDepth = maxDepth(root.left);
-        int rightDepth = maxDepth(root.right);
-        // Choose the larger one and add the root to it.
-        if (leftDepth > rightDepth)
-            return (root.left.value);
-        else
-            return (root.right.value);
-    }
-
     public Node search(Node root, int key) {
         // Base Cases: root is null or key is present at root
         if (root == null || root.value == key)
@@ -62,33 +50,77 @@ public class BinaryTree {
         return search(root.left, key);
     }
 
-    private Node deleteNode(Node root, Integer data) {
+    static void deleteValue(Node root, int key) {
+        if (root == null)
+            return;
 
-        if (root == null) return root;
+        if (root.left == null &&
+                root.right == null) {
+            if (root.value == key)
+                return;
+            else
+                return;
+        }
 
-        if (data < root.value) {
-            root.setLeft(deleteNode(root.left, data));
-        } else if (data > root.value) {
-            root.setRight(deleteNode(root.right, data));
-        } else {
-            // node with no leaf nodes
-            if (root.left == null && root.right == null) {
-                return null;
-            } else if (root.left == null) {
-                // node with one node (no left node)
-                return root.right;
-            } else if (root.right == null) {
-                // node with one node (no right node)
-                return root.left;
-            } else {
-                // nodes with two nodes
-                // search for min number in right sub tree
-                Integer minValue = minValue(root.right);
-                root.setValue(minValue);
-                root.setRight(deleteNode(root.right, minValue));
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(root);
+        Node temp = null, keyNode = null;
+
+        // Do level order traversal until
+        // we find key and last node.
+        while (!q.isEmpty()) {
+            temp = q.peek();
+            q.remove();
+
+            if (temp.value == key)
+                keyNode = temp;
+
+            if (temp.left != null)
+                q.add(temp.left);
+
+            if (temp.right != null)
+                q.add(temp.right);
+        }
+
+        if (keyNode != null) {
+            int x = temp.value;
+            deleteDeepest(root, temp);
+            keyNode.value = x;
+        }
+    }
+
+    static void deleteDeepest(Node root, Node delNode) {
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(root);
+
+        Node temp = null;
+
+        // Do level order traversal until last node
+        while (!q.isEmpty()) {
+            temp = q.peek();
+            q.remove();
+
+            if (temp == delNode) {
+                temp = null;
+                return;
+
+            }
+            if (temp.right != null) {
+                if (temp.right == delNode) {
+                    temp.right = null;
+                    return;
+                } else
+                    q.add(temp.right);
+            }
+
+            if (temp.left != null) {
+                if (temp.left == delNode) {
+                    temp.left = null;
+                    return;
+                } else
+                    q.add(temp.left);
             }
         }
-        return root;
     }
 
     private Integer minValue(Node node) {
@@ -98,7 +130,7 @@ public class BinaryTree {
         return node.value;
     }
 
-    public void delete(Node root, Integer data) {
-        deleteNode(this.root, data);
+    public void delete(Node root, int value) {
+        deleteValue(root, value);
     }
 }

@@ -8,49 +8,60 @@ public class Main {
         int start = 10000;
         int step = 10000;
         int end = 1000000;
-        int min = 0;
-        int max = 1000000000;
+        int min = 1;
+        int max = 10;
         int size;
 
         StringBuilder resultString = new StringBuilder();
         BinaryTree bt = new BinaryTree();
 
         createFile();
-        resultString.append("size" + "  " + "Max Depth" + "  " + "addTimeElapsed" + "  " +
+        resultString.append("size" + "  " + "MaxDepth" + "  " + "addTimeElapsed" + "  " +
                 "searchTimeElapsed" + "  " + "deleteTimeElapsed" + '\n');
         for (int i = start; i <= end; ) {
             size = i;
             i = i + step;
-
             //creating of binary tree
-            long startTime = System.nanoTime();
+            long time1 = 0;
+            long time2 = 0;
+            long time3 = 0;
             for (int i2 = 1; i2 <= size; i2++) {
                 int value = (int) (Math.random() * (max - min + 1) + min);
+                long startTime = System.nanoTime();
                 bt.add(value);
+                long endTime = System.nanoTime();
+                long time = (endTime - startTime) / 1;
+                time1 = time1 + time;
             }
-            long endTime = System.nanoTime();
-            long addTimeElapsed = (endTime - startTime) / 10000000;
-
-            int maxDepthValue = bt.maxDepthValue(bt.root);
+            long addTimeElapsed = time1 / size;
+            int maxDepthPrint = bt.maxDepth(bt.root);
 
             //binary tree search method
-            long startTime2 = System.nanoTime();
-            int searchingValue = maxDepthValue;
-            //   System.out.println(size + " "+maxDepthValue);
-            bt.search(bt.root, searchingValue);
-            long endTime2 = System.nanoTime();
-            long searchTimeElapsed = (endTime2 - startTime2) / 10000000;
+            for (int j = 0; j < 100; j++) {
+                int searchingValue = (int) (Math.random() * (max - min + 1) + min);
+                long startTime2 = System.nanoTime();
+                bt.search(bt.root, searchingValue);
+                long endTime2 = System.nanoTime();
+                long time = (endTime2 - startTime2) / 1;
+                time2 = time2 + time;
+            }
+            long searchTimeElapsed = time2 / 100;
 
             //binary tree delete method
-            long startTime3 = System.nanoTime();
-            int deletingValue = (int) (Math.random() * (max - min + 1) + min);
-            bt.delete(bt.root, deletingValue);
-            long endTime3 = System.nanoTime();
-            long deleteTimeElapsed = (endTime3 - startTime3) / 10000000;
+            for (int j = 0; j < 100; j++) {
+                int deletingValue = (int) (Math.random() * (max - min + 1) + min);
+                long startTime3 = System.nanoTime();
+                bt.delete(bt.root, deletingValue);
+                long endTime3 = System.nanoTime();
+                long time = (endTime3 - startTime3) / 1;
+                time3 = time3 + time;
+            }
+            long deleteTimeElapsed = time3 / 100;
 
-            resultString.append(size + " " + bt.maxDepth(bt.root) + " " + addTimeElapsed + " " +
+            resultString.append(size + " " + maxDepthPrint + " " + addTimeElapsed + " " +
                     searchTimeElapsed + " " + deleteTimeElapsed + '\n');
-             System.out.println(size + " " + bt.maxDepth(bt.root));
+            System.out.println(size + " " + maxDepthPrint + " " + addTimeElapsed + " " +
+                    searchTimeElapsed + " " + deleteTimeElapsed);
         }
 
         fileWriter(resultString.toString());
@@ -61,7 +72,6 @@ public class Main {
             File myObj = new File("src/result.txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
-            } else {
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
