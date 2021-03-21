@@ -5,6 +5,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/ListaCykliczna/pom.xml" />
+        <option value="$PROJECT_DIR$/HashTable/pom.xml" />
+        <option value="$PROJECT_DIR$/AVLTree/pom.xml" />
       </list>
     </option>
   </component>

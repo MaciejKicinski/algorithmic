@@ -6,8 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="algorithmic" />
+        <module name="BinaryTree" />
+        <module name="AVLTree" />
+        <module name="ListaCykliczna" />
+        <module name="HashTable" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="algorithmic" target="7" />
+      <module name="BinaryTree" target="7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
